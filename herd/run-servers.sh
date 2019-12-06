@@ -1,3 +1,11 @@
+### 
+# @Descripttion: 
+ # @version: 0.1
+ # @Author: lwg
+ # @Date: 2019-12-04 09:57:04
+ # @LastEditors: lwg
+ # @LastEditTime: 2019-12-06 11:40:19
+ ###
 # A function to echo in blue color
 function blue() {
 	es=`tput setaf 4`
@@ -5,7 +13,7 @@ function blue() {
 	echo "${es}$1${ee}"
 }
 
-export HRD_REGISTRY_IP="10.113.1.47"
+export HRD_REGISTRY_IP="192.168.3.112"
 export MLX5_SINGLE_THREADED=1
 export MLX4_SINGLE_THREADED=1
 
@@ -30,7 +38,7 @@ sudo LD_LIBRARY_PATH=/usr/local/lib/ -E \
 	numactl --cpunodebind=0 --membind=0 ./main \
 	--master 1 \
 	--base-port-index 0 \
-	--num-server-ports 2 &
+	--num-server-ports 1 &
 
 # Give the master process time to create and register per-port request regions
 sleep 1
@@ -40,5 +48,5 @@ sudo LD_LIBRARY_PATH=/usr/local/lib/ -E \
 	numactl --cpunodebind=0 --membind=0 ./main \
 	--is-client 0 \
 	--base-port-index 0 \
-	--num-server-ports 2 \
-	--postlist 32 &
+	--num-server-ports 1 \
+	--postlist 1 &

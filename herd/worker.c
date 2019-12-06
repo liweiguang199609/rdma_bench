@@ -41,7 +41,7 @@ void* run_worker(void* arg) {
   }
 
   /* Map the request region created by the master */
-  volatile struct mica_op* req_buf;
+  volatile struct mica_op* req_buf; //这个req_buf其实是master线程创建，在这里映射给worker线程使用
   int sid = shmget(MASTER_SHM_KEY, RR_SIZE, SHM_HUGETLB | 0666);
   assert(sid != -1);
   req_buf = shmat(sid, 0, 0);
@@ -62,7 +62,7 @@ void* run_worker(void* arg) {
 
     /* Get the UD queue pair for the ith client */
     clt_qp[i] = NULL;
-    while (clt_qp[i] == NULL) {
+    while (clt_qp[i] == NULL) { //等待客户端的UD qp都建立好
       clt_qp[i] = hrd_get_published_qp(clt_name);
       if (clt_qp[i] == NULL) {
         usleep(200000);
@@ -123,15 +123,18 @@ void* run_worker(void* arg) {
   struct timespec start, end;
   clock_gettime(CLOCK_REALTIME, &start);
 
+  sleep(1);
+
   while (1) {
-    if (unlikely(rolling_iter >= M_4)) {
+    long times = K_512;
+    if (unlikely(rolling_iter >= times)) {
       clock_gettime(CLOCK_REALTIME, &end);
       double seconds = (end.tv_sec - start.tv_sec) +
                        (double)(end.tv_nsec - start.tv_nsec) / 1000000000;
       printf(
           "main: Worker %d: %.2f IOPS. Avg per-port postlist = %.2f. "
           "HERD lookup fail rate = %.4f\n",
-          wrkr_lid, M_4 / seconds, (double)nb_tx_tot / nb_post_send,
+          wrkr_lid, times / seconds, (double)nb_tx_tot / nb_post_send,
           (double)kv.num_get_fail / kv.num_get_op);
 
       rolling_iter = 0;
@@ -220,7 +223,7 @@ void* run_worker(void* arg) {
         break;
       }
     }
-
+    if(wr_i == 0) continue;
     mica_batch_op(&kv, wr_i, op_ptr_arr, resp_arr);
 
     /*

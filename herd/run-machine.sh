@@ -1,3 +1,11 @@
+### 
+# @Descripttion: 
+ # @version: 0.1
+ # @Author: lwg
+ # @Date: 2019-12-04 09:57:04
+ # @LastEditors: lwg
+ # @LastEditTime: 2019-12-06 15:25:59
+ ###
 # A function to echo in blue color
 function blue() {
 	es=`tput setaf 4`
@@ -5,7 +13,7 @@ function blue() {
 	echo "${es}$1${ee}"
 }
 
-export HRD_REGISTRY_IP="10.113.1.47"
+export HRD_REGISTRY_IP="192.168.3.112"
 export MLX5_SINGLE_THREADED=1
 export MLX4_SINGLE_THREADED=1
 
@@ -18,7 +26,12 @@ fi
 blue "Removing hugepages"
 shm-rm.sh 1>/dev/null 2>/dev/null
 
-num_threads=14		# Threads per client machine
+sudo pkill memcached
+memcached -l 0.0.0.0 1>/dev/null 2>/dev/null &
+sleep 1
+
+num_threads=10		# Threads per client machine
+
 
 blue "Running $num_threads client threads"
 
@@ -26,8 +39,8 @@ sudo LD_LIBRARY_PATH=/usr/local/lib/ -E \
 	numactl --cpunodebind=0 --membind=0 ./main \
 	--num-threads $num_threads \
 	--base-port-index 0 \
-	--num-server-ports 2 \
-	--num-client-ports 2 \
+	--num-server-ports 1 \
+	--num-client-ports 1 \
 	--is-client 1 \
 	--update-percentage 0 \
 	--machine-id $1 &
