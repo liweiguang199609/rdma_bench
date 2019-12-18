@@ -2,7 +2,7 @@
 source $(dirname $0)/../scripts/utils.sh
 source $(dirname $0)/../scripts/mlx_env.sh
 #export HRD_REGISTRY_IP="fawn-pluto0"
-export HRD_REGISTRY_IP="akalianode-1.rdma.fawn.apt.emulab.net"
+export HRD_REGISTRY_IP="192.168.3.112"
 
 drop_shm
 

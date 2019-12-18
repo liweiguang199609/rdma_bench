@@ -1,8 +1,16 @@
+### 
+# @Descripttion: 
+ # @version: 0.1
+ # @Author: lwg
+ # @Date: 2019-12-04 09:57:05
+ # @LastEditors: lwg
+ # @LastEditTime: 2019-12-11 19:25:36
+ ###
 #!/usr/bin/env bash
 source $(dirname $0)/../scripts/utils.sh
 source $(dirname $0)/../scripts/mlx_env.sh
 #export HRD_REGISTRY_IP="fawn-pluto0"
-export HRD_REGISTRY_IP="akalianode-1.rdma.fawn.apt.emulab.net"
+export HRD_REGISTRY_IP="192.168.3.112"
 
 drop_shm
 

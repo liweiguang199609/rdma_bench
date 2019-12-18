@@ -126,7 +126,7 @@ void* run_worker(void* arg) {
   sleep(1);
 
   while (1) {
-    long times = K_512;
+    long times = M_8;
     if (unlikely(rolling_iter >= times)) {
       clock_gettime(CLOCK_REALTIME, &end);
       double seconds = (end.tv_sec - start.tv_sec) +
@@ -225,6 +225,15 @@ void* run_worker(void* arg) {
     }
     if(wr_i == 0) continue;
     mica_batch_op(&kv, wr_i, op_ptr_arr, resp_arr);
+    // UNUSED(op_ptr_arr);
+    // int simulation_count;
+    // uint8_t simulation_value[2] = "1";
+    // for(simulation_count = 0; simulation_count < wr_i; simulation_count++){
+    //     resp_arr[simulation_count].type = MICA_RESP_GET_SUCCESS;
+    //     resp_arr[simulation_count].val_len = 1;
+    //     resp_arr[simulation_count].val_ptr = simulation_value;
+    // }
+
 
     /*
      * Fill in the computed @val_ptr's. For non-postlist mode, this loop

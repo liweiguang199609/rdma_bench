@@ -1,11 +1,19 @@
+### 
+# @Descripttion: 
+ # @version: 0.1
+ # @Author: lwg
+ # @Date: 2019-12-04 09:57:05
+ # @LastEditors: lwg
+ # @LastEditTime: 2019-12-11 20:28:41
+ ###
 #!/usr/bin/env bash
 source $(dirname $0)/../scripts/utils.sh
 source $(dirname $0)/../scripts/mlx_env.sh
-export HRD_REGISTRY_IP="10.10.1.1"
+export HRD_REGISTRY_IP="192.168.3.112"
 
 drop_shm
 
-num_server_threads=1
+num_server_threads=16
 
 blue "Reset server QP registry"
 sudo pkill memcached

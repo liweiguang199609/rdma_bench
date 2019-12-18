@@ -1,7 +1,15 @@
+### 
+# @Descripttion: 
+ # @version: 0.1
+ # @Author: lwg
+ # @Date: 2019-12-04 09:57:05
+ # @LastEditors: lwg
+ # @LastEditTime: 2019-12-11 20:28:29
+ ###
 #!/usr/bin/env bash
 source $(dirname $0)/../scripts/utils.sh
 source $(dirname $0)/../scripts/mlx_env.sh
-export HRD_REGISTRY_IP="10.10.1.1"
+export HRD_REGISTRY_IP="192.168.3.112"
 
 drop_shm
 
@@ -9,7 +17,7 @@ drop_shm
 executable="../build/rw-tput-sender"
 chmod +x $executable
 
-num_threads=1			# Threads per client machine
+num_threads=16			# Threads per client machine
 blue "Running $num_threads client threads"
 
 # Check number of arguments

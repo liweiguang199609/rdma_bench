@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 0.1
+ * @Author: lwg
+ * @Date: 2019-12-04 09:57:04
+ * @LastEditors: lwg
+ * @LastEditTime: 2019-12-05 10:29:31
+ */
 #include "hrd.h"
 #include "main.h"
 #include "mica.h"
@@ -36,7 +44,7 @@ void* run_master(void* arg) {
                               ib_port_index, 0, /* port index, numa node id */
                               NUM_CLIENTS, 1,   /* #conn_qps, use_uc */
                               prealloc_conn_buf, RR_SIZE, shm_key, 0, 0,
-                              -1); /* #dgram qps, buf size, shm key */
+                              -1); /* #dgram qps, buf size, shm key *///这里申请的是connect 相关的socket内存以及QP内存等  
 
     /* Zero out the request buffer */
     memset((void*)cb[i]->conn_buf, 0, RR_SIZE);
@@ -59,7 +67,7 @@ void* run_master(void* arg) {
     printf("main: Master waiting for client %s\n", clt_conn_qp_name);
 
     struct hrd_qp_attr* clt_qp = NULL;
-    while (clt_qp == NULL) {
+    while (clt_qp == NULL) { //等待客户端通过memcached的连接
       clt_qp = hrd_get_published_qp(clt_conn_qp_name);
       if (clt_qp == NULL) {
         usleep(200000);

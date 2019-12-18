@@ -3,7 +3,7 @@
 #include <thread>
 #include "libhrd_cpp/hrd.h"
 
-static constexpr size_t kAppNumQPs = 1;
+static constexpr size_t kAppNumQPs = 4096;
 static constexpr size_t kAppBufSize = 8192;
 static constexpr bool kAppRoundOffset = true;
 static constexpr size_t kAppMaxPostlist = 64;

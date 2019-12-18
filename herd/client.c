@@ -4,7 +4,7 @@
 
 #define DGRAM_BUF_SIZE 4096
 
-/* Generate a random permutation of [0, n - 1] for client @clt_gid */
+/* Generate a random permutation of [0, n - 1] for client @clt_gid */ //根据不同传进来的client编号clt_gid，得到[0, n-1]不同的排列
 int* get_random_permutation(int n, int clt_gid, uint64_t* seed) {
   int i, j, temp;
   assert(n > 0);
@@ -78,7 +78,7 @@ void* run_client(void* arg) {
          clt_conn_qp_name, mstr_qp_name);
 
   struct hrd_qp_attr* mstr_qp = NULL;
-  while (mstr_qp == NULL) {
+  while (mstr_qp == NULL) { //等待master那边的memcached准备好
     mstr_qp = hrd_get_published_qp(mstr_qp_name);
     if (mstr_qp == NULL) {
       usleep(200000);
@@ -86,12 +86,12 @@ void* run_client(void* arg) {
   }
 
   printf("main: Client %s found master! Connecting..\n", clt_conn_qp_name);
-  hrd_connect_qp(cb, 0, mstr_qp);
-  hrd_wait_till_ready(mstr_qp_name);
+  hrd_connect_qp(cb, 0, mstr_qp);//通过memcached互换QP信息，之后设置状态为RTS
+  hrd_wait_till_ready(mstr_qp_name);//等待master那边设置好<HRD_RESERVED_NAME_PREFIX+mstr_qp_name, hrd_ready>设置好
 
   /* Start the real work */
   uint64_t seed = 0xdeadbeef;
-  int* key_arr = get_random_permutation(HERD_NUM_KEYS, clt_gid, &seed);
+  int* key_arr = get_random_permutation(HERD_NUM_KEYS, clt_gid, &seed); //生成[0, HERD_NUM_KEYS]不同的排列
   int key_i, ret;
 
   /* Some tracking info */
@@ -121,12 +121,13 @@ void* run_client(void* arg) {
   }
 
   while (1) {
-    if (rolling_iter >= K_512) {
+    long times = M_8;
+    if (rolling_iter >= times) {
       clock_gettime(CLOCK_REALTIME, &end);
       double seconds = (end.tv_sec - start.tv_sec) +
                        (double)(end.tv_nsec - start.tv_nsec) / 1000000000;
       printf("main: Client %d: %.2f IOPS. nb_tx = %lld\n", clt_gid,
-             K_512 / seconds, nb_tx);
+             times / seconds, nb_tx);
 
       rolling_iter = 0;
 
@@ -181,7 +182,6 @@ void* run_client(void* arg) {
     wr.wr.rdma.remote_addr = mstr_qp->buf_addr + OFFSET(wn, clt_gid, ws[wn]) *
                                                      sizeof(struct mica_op);
     wr.wr.rdma.rkey = mstr_qp->rkey;
-
     ret = ibv_post_send(cb->conn_qp[0], &wr, &bad_send_wr);
     CPE(ret, "ibv_post_send error", ret);
     // printf("Client %d: sending request index %lld\n", clt_gid, nb_tx);

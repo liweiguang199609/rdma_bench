@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 0.1
+ * @Author: lwg
+ * @Date: 2019-12-04 09:57:04
+ * @LastEditors: lwg
+ * @LastEditTime: 2019-12-17 10:54:32
+ */
 #include <stdint.h>
 
 /*
@@ -28,15 +36,15 @@
 
 /* Configuration options */
 #define MAX_SERVER_PORTS 4
-#define NUM_WORKERS 12
-#define NUM_CLIENTS 70
+#define NUM_WORKERS 15
+#define NUM_CLIENTS 15
 
 /* Performance options */
 #define WINDOW_SIZE 32 /* Outstanding requests kept by each client */
 #define NUM_UD_QPS 1   /* Number of UD QPs per port */
 #define USE_POSTLIST 1
 
-#define UNSIG_BATCH 64 /* XXX Check if increasing this helps */
+#define UNSIG_BATCH 32 /* XXX Check if increasing this helps */
 #define UNSIG_BATCH_ (UNSIG_BATCH - 1)
 
 /* SHM key for the 1st request region created by master. ++ for other RRs.*/
@@ -44,6 +52,8 @@
 #define RR_SIZE (16 * 1024 * 1024) /* Request region size */
 #define OFFSET(wn, cn, ws) \
   ((wn * NUM_CLIENTS * WINDOW_SIZE) + (cn * WINDOW_SIZE) + ws)
+
+#define UNUSED(s) (void)(s) 
 
 struct thread_params {
   int id;

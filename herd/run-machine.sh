@@ -4,7 +4,7 @@
  # @Author: lwg
  # @Date: 2019-12-04 09:57:04
  # @LastEditors: lwg
- # @LastEditTime: 2019-12-06 15:25:59
+ # @LastEditTime: 2019-12-10 16:00:05
  ###
 # A function to echo in blue color
 function blue() {
@@ -30,7 +30,7 @@ sudo pkill memcached
 memcached -l 0.0.0.0 1>/dev/null 2>/dev/null &
 sleep 1
 
-num_threads=10		# Threads per client machine
+num_threads=15		# Threads per client machine
 
 
 blue "Running $num_threads client threads"
